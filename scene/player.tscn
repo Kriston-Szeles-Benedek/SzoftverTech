@@ -1,5 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://b2vrfj5g4u6so"]
+[gd_scene load_steps=9 format=3 uid="uid://b2vrfj5g4u6so"]
 
+[ext_resource type="Script" path="res://scripts/WesternPlayer.cs" id="1_1vegw"]
 [ext_resource type="Texture2D" uid="uid://ca4ls5xu04qkc" path="res://assets/sprites/cowboy kollázs.png" id="1_cpk7w"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bvdxk"]
@@ -38,17 +39,20 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_st0f5"]
-radius = 10.0499
+[sub_resource type="CircleShape2D" id="CircleShape2D_1xt6b"]
+radius = 9.0
 
 [node name="player" type="CharacterBody2D"]
+script = ExtResource("1_1vegw")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -12)
 sprite_frames = SubResource("SpriteFrames_vl0dk")
 animation = &"idle"
 autoplay = "idle"
-frame_progress = 0.372233
+frame = 2
+frame_progress = 0.0142987
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D"]
-shape = SubResource("CircleShape2D_st0f5")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -10)
+shape = SubResource("CircleShape2D_1xt6b")
