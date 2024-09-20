@@ -1,58 +1,185 @@
-[gd_scene load_steps=9 format=3 uid="uid://b2vrfj5g4u6so"]
+[gd_scene load_steps=18 format=3 uid="uid://b2vrfj5g4u6so"]
 
 [ext_resource type="Script" path="res://scripts/WesternPlayer.cs" id="1_1vegw"]
 [ext_resource type="Texture2D" uid="uid://ca4ls5xu04qkc" path="res://assets/sprites/cowboy kollázs.png" id="1_cpk7w"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_bvdxk"]
-atlas = ExtResource("1_cpk7w")
-region = Rect2(0, 0, 32, 32)
+[sub_resource type="CSharpScript" id="CSharpScript_6ja1n"]
+script/source = "using Godot;
+using System;
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_scieq"]
-atlas = ExtResource("1_cpk7w")
-region = Rect2(32, 0, 32, 32)
+public partial class Gun : Node2D
+{
+	[Export] PackedScene bullet;
+	[Export] float bullet_speed = 700f;
+	[Export] float bulletPerSec = 3f; // 3 lövés másodpercenként
+	[Export] float bulletDamage = 30f;
+	
+	float fireRate;
+	float timeUntilFire = 0f;
+	
+	private WesternPlayer player;
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_5hcvx"]
-atlas = ExtResource("1_cpk7w")
-region = Rect2(64, 0, 32, 32)
+	public override void _Ready()
+	{
+		fireRate = 1f / bulletPerSec;  // fireRate = 1 / 3f = 0.33 másodpercenként
+		player = GetParent<WesternPlayer>();  // Feltételezzük, hogy a játékos a szülője
+	}
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_txf0i"]
-atlas = ExtResource("1_cpk7w")
-region = Rect2(96, 0, 32, 32)
+	public override void _Process(double delta)
+	{
+		// Folyamatosan csökkentjük az időt a következő lövésig
+		timeUntilFire -= (float)delta;
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_vl0dk"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_bvdxk")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_scieq")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_5hcvx")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_txf0i")
-}],
-"loop": true,
-"name": &"idle",
-"speed": 5.0
-}]
+		// Lövés bemenet és időzítés ellenőrzése
+		if (Input.IsActionJustPressed(\"shoot\") && timeUntilFire <= 0f)
+		{
+			// Lövedék létrehozása
+			RigidBody2D bulletInstance = bullet.Instantiate<RigidBody2D>();
+			
+			// Lövedék pozíciójának beállítása
+			bulletInstance.GlobalPosition = GlobalPosition;
+
+			// Lövés iránya: a játékos mozgási iránya (Velocity) normálizálva
+			Vector2 shootDirection = player.Velocity.Normalized();
+			bulletInstance.LinearVelocity = shootDirection * bullet_speed;
+
+			// Lövedék hozzáadása a játékhierarchiához
+			GetTree().Root.AddChild(bulletInstance);
+
+			// Időzítés újraindítása
+			timeUntilFire = fireRate;
+		}
+	}
+}
+"
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1xt6b"]
 radius = 9.0
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_laqxm"]
+atlas = ExtResource("1_cpk7w")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l5fe3"]
+atlas = ExtResource("1_cpk7w")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_di05h"]
+atlas = ExtResource("1_cpk7w")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sicos"]
+atlas = ExtResource("1_cpk7w")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kgit1"]
+atlas = ExtResource("1_cpk7w")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wnhfh"]
+atlas = ExtResource("1_cpk7w")
+region = Rect2(0, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2umc2"]
+atlas = ExtResource("1_cpk7w")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3vid1"]
+atlas = ExtResource("1_cpk7w")
+region = Rect2(32, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tvrci"]
+atlas = ExtResource("1_cpk7w")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_013bn"]
+atlas = ExtResource("1_cpk7w")
+region = Rect2(64, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pns10"]
+atlas = ExtResource("1_cpk7w")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_an08p"]
+atlas = ExtResource("1_cpk7w")
+region = Rect2(96, 96, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ilujy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_laqxm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l5fe3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_di05h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sicos")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kgit1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wnhfh")
+}],
+"loop": true,
+"name": &"run_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2umc2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3vid1")
+}],
+"loop": true,
+"name": &"run_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tvrci")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_013bn")
+}],
+"loop": true,
+"name": &"run_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pns10")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_an08p")
+}],
+"loop": true,
+"name": &"run_up",
+"speed": 5.0
+}]
+
 [node name="player" type="CharacterBody2D"]
 script = ExtResource("1_1vegw")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(0, -12)
-sprite_frames = SubResource("SpriteFrames_vl0dk")
-animation = &"idle"
-autoplay = "idle"
-frame = 2
-frame_progress = 0.0142987
+[node name="Gun" type="Node2D" parent="."]
+script = SubResource("CSharpScript_6ja1n")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -10)
 shape = SubResource("CircleShape2D_1xt6b")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -12)
+sprite_frames = SubResource("SpriteFrames_ilujy")
+animation = &"idle"
+frame_progress = 0.182885
