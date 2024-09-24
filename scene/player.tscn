@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/WesternPlayer.cs" id="1_1vegw"]
 [ext_resource type="Texture2D" uid="uid://ca4ls5xu04qkc" path="res://assets/sprites/cowboy kollázs.png" id="1_cpk7w"]
-[ext_resource type="Script" path="res://scripts/Gun.cs" id="2_3ejv6"]
+[ext_resource type="PackedScene" uid="uid://ctyub3r80j5tw" path="res://scene/Bullet.tscn" id="2_vevh2"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1xt6b"]
 radius = 9.0
@@ -121,9 +121,7 @@ animations = [{
 
 [node name="player" type="CharacterBody2D"]
 script = ExtResource("1_1vegw")
-
-[node name="Gun" type="Node2D" parent="."]
-script = ExtResource("2_3ejv6")
+bulletScene = ExtResource("2_vevh2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -10)
@@ -132,5 +130,4 @@ shape = SubResource("CircleShape2D_1xt6b")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -12)
 sprite_frames = SubResource("SpriteFrames_ilujy")
-animation = &"idle"
-frame_progress = 0.182885
+animation = &"run_up"
