@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://c28xp5twfndxf"]
+
+[ext_resource type="Texture2D" uid="uid://bc6ed1pimotax" path="res://assets/sprites/western_stuff.png" id="1_5hu64"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0ss4j"]
+texture = ExtResource("1_5hu64")
+7:8/size_in_atlas = Vector2i(3, 4)
+7:8/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_h5hqv"]
+sources/0 = SubResource("TileSetAtlasSource_0ss4j")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cf1uf"]
+size = Vector2(7, 4)
+
+[node name="Fa" type="StaticBody2D"]
+position = Vector2(7, -6)
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+position = Vector2(3, -6)
+tile_map_data = PackedByteArray(0, 0, 255, 255, 254, 255, 0, 0, 7, 0, 8, 0, 0, 0)
+tile_set = SubResource("TileSet_h5hqv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_cf1uf")
